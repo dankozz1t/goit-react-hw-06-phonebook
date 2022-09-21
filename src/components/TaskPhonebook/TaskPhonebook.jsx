@@ -8,17 +8,10 @@ import { ContactForm } from '../ContactForm';
 import { ConfettiContainer } from '../Confetti';
 import { login } from './utils';
 
-import { Notify } from 'notiflix/build/notiflix-notify-aio';
-
 import s from './TaskPhonebook.module.css';
 
-import { useSelector, shallowEqual } from 'react-redux';
-import { useDispatch } from 'react-redux';
-import {
-  addContact,
-  deleteContact,
-  setFilter,
-} from '../../redux/contactsSlice';
+import { useSelector, shallowEqual, useDispatch } from 'react-redux';
+import { deleteContact, setFilter } from '../../redux/contactsSlice';
 
 export function TaskPhonebook() {
   const contacts = useSelector(state => state.contacts.items, shallowEqual);
@@ -28,15 +21,6 @@ export function TaskPhonebook() {
   useEffect(() => {
     login.submit();
   }, [contacts]);
-
-  const onAddContact = contact => {
-    const searchUnique = contact.name.toLowerCase();
-    if (contacts.find(({ name }) => name.toLowerCase() === searchUnique)) {
-      Notify.failure(`${contact.name} is already in contacts`);
-      return;
-    }
-    dispatch(addContact([contact]));
-  };
 
   const handleClickDelete = id => {
     dispatch(deleteContact(id));
@@ -55,7 +39,7 @@ export function TaskPhonebook() {
   return (
     <div className={s.box}>
       <Section title="Phonebook">
-        <ContactForm onAddContact={onAddContact} />
+        <ContactForm />
       </Section>
 
       <Section title="Contacts">
