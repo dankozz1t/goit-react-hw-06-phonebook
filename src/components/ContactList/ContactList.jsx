@@ -1,38 +1,42 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect, useMemo } from 'react';
+
+import { useSelector, shallowEqual } from 'react-redux';
+
+import { getFilter, getContacts } from '../../redux/selectors';
+
+import { ConfettiContainer } from '../Confetti/Confetti';
+import { login } from '../Confetti/utils';
 
 import { ContactItem } from '../ContactItem/ContactItem';
 
 import s from './ContactList.module.css';
 
-export function ContactList({ contacts, handleClickDelete }) {
+export function ContactList() {
+  const contacts = useSelector(getContacts, shallowEqual);
+  const filter = useSelector(getFilter, shallowEqual);
+
+  useEffect(() => {
+    login.submit();
+  }, [contacts]);
+
+  const renderContacts = useMemo(() => {
+    return contacts.filter(({ name }) =>
+      name.toLowerCase().includes(filter.toLowerCase().trim())
+    );
+  }, [filter, contacts]);
+
+  if (renderContacts.length === 0) {
+    return <></>;
+  }
+
+  const elements = renderContacts.map(({ id, name, number }) => (
+    <ContactItem key={id} id={id} name={name} number={number} />
+  ));
+
   return (
     <>
-      {contacts.length > 0 && (
-        <ul className={s.list}>
-          {contacts.map(({ id, name, number }) => (
-            <ContactItem
-              key={id}
-              name={name}
-              number={number}
-              handleClickDelete={() => {
-                handleClickDelete(id);
-              }}
-            />
-          ))}
-        </ul>
-      )}
+      <ul className={s.list}>{elements}</ul>
+      <ConfettiContainer />
     </>
   );
 }
-
-ContactList.propTypes = {
-  contacts: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      number: PropTypes.string.isRequired,
-    })
-  ).isRequired,
-  handleClickDelete: PropTypes.func.isRequired,
-};
