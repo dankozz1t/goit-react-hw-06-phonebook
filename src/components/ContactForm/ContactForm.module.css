@@ -1,0 +1,36 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+
+  padding: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+
+  border: 1px solid lightcoral;
+  border-radius: 5px;
+}
+
+.label {
+  display: flex;
+  flex-direction: column;
+}
+
+.btn {
+  padding: 5px;
+  border: none;
+  font-size: 18px;
+  border-radius: 5px;
+  transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1),
+    transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn:hover {
+  background-color: green;
+  color: white;
+}
+
+.btn:active {
+  background-color: darkgreen;
+  color: white;
+}
