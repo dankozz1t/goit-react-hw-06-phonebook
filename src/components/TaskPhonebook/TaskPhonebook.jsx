@@ -11,11 +11,13 @@ import { login } from './utils';
 import s from './TaskPhonebook.module.css';
 
 import { useSelector, shallowEqual, useDispatch } from 'react-redux';
-import { deleteContact, setFilter } from '../../redux/contactsSlice';
+import { deleteContact } from '../../redux/contactsSlice';
+
+import { getFilter, getContacts } from '../../redux/selectors';
 
 export function TaskPhonebook() {
-  const contacts = useSelector(state => state.contacts.items, shallowEqual);
-  const filter = useSelector(state => state.contacts.filter, shallowEqual);
+  const contacts = useSelector(getContacts, shallowEqual);
+  const filter = useSelector(getFilter, shallowEqual);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -24,10 +26,6 @@ export function TaskPhonebook() {
 
   const handleClickDelete = id => {
     dispatch(deleteContact(id));
-  };
-
-  const handleFilter = e => {
-    dispatch(setFilter(e.target.value));
   };
 
   const renderContacts = useMemo(() => {
@@ -43,7 +41,7 @@ export function TaskPhonebook() {
       </Section>
 
       <Section title="Contacts">
-        <Filter handleFilter={handleFilter} value={filter} />
+        <Filter />
 
         <ContactList
           contacts={renderContacts}
