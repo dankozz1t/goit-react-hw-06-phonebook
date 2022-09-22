@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useReducer } from 'react';
 
 import { useSelector, shallowEqual, useDispatch } from 'react-redux';
 import { addContact } from '../../redux/contactsSlice';
@@ -9,9 +9,29 @@ import { nanoid } from 'nanoid';
 
 import s from './ContactForm.module.css';
 
+const initialValue = {
+  number: '',
+  name: '',
+};
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'name':
+      return { ...state, name: action.payload };
+
+    case 'number':
+      return { ...state, number: action.payload };
+
+    case 'reset':
+      return { ...action.payload };
+
+    default:
+      return state;
+  }
+};
+
 export function ContactForm() {
-  const [name, setName] = useState('');
-  const [number, setNumber] = useState('');
+  const [{ name, number }, dispatchReducer] = useReducer(reducer, initialValue);
 
   const contacts = useSelector(getContacts, shallowEqual);
   const dispatch = useDispatch();
@@ -23,7 +43,7 @@ export function ContactForm() {
       dispatch(addContact({ id: nanoid(), name, number }));
     }
 
-    clearInput();
+    dispatchReducer({ type: 'reset', payload: initialValue });
   };
 
   const isUniqueName = newName => {
@@ -36,24 +56,10 @@ export function ContactForm() {
     return true;
   };
 
-  const clearInput = () => {
-    setName('');
-    setNumber('');
-  };
-
   const handleInputChange = e => {
     const { name, value } = e.currentTarget;
 
-    switch (name) {
-      case 'name':
-        setName(value);
-        break;
-      case 'number':
-        setNumber(value);
-        break;
-      default:
-        return;
-    }
+    dispatchReducer({ type: name, payload: value });
   };
 
   return (
