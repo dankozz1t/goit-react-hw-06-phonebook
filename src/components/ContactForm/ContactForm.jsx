@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { useEffect, useReducer } from 'react';
 
 import { useSelector, shallowEqual, useDispatch } from 'react-redux';
 import { addContact } from '../../redux/contactsSlice';
@@ -6,6 +6,8 @@ import { getContacts } from '../../redux/selectors';
 
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import { nanoid } from 'nanoid';
+
+import { login } from '../Confetti/utils';
 
 import s from './ContactForm.module.css';
 
@@ -35,6 +37,10 @@ export function ContactForm() {
 
   const contacts = useSelector(getContacts, shallowEqual);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    login.submit();
+  }, [contacts]);
 
   const handleFormSubmit = e => {
     e.preventDefault();

@@ -1,7 +1,8 @@
 import { Section } from '../Section';
+import { ContactForm } from '../ContactForm';
 import { Filter } from '../Filter';
 import { ContactList } from '../ContactList';
-import { ContactForm } from '../ContactForm';
+import { ConfettiContainer } from '../Confetti/Confetti';
 
 import s from './TaskPhonebook.module.css';
 
@@ -16,6 +17,7 @@ export function TaskPhonebook() {
         <Filter />
 
         <ContactList />
+        <ConfettiContainer />
       </Section>
     </div>
   );
