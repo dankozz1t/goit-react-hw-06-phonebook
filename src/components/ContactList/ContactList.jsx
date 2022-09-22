@@ -19,9 +19,5 @@ export function ContactList() {
     <ContactItem key={id} id={id} name={name} number={number} />
   ));
 
-  return (
-    <>
-      <ul className={s.list}>{elements}</ul>
-    </>
-  );
+  return <ul className={s.list}>{elements}</ul>;
 }
